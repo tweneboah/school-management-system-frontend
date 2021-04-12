@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   CButton,
   CCard,
@@ -11,21 +11,21 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CRow,
-} from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import logo from "../../assets/icons/logo.png";
-import axios from "./../../store/axios";
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { loggin } from "../../store/slices/userSlice";
-import { LoginString } from "../../store/localStorage";
-import { errorAlert } from "../../utils";
-import { Link } from "react-router-dom";
-import { handleLogin } from "../../store/apiCall";
+} from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import logo from '../../assets/icons/logo.png';
+import axios from './../../store/axios';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { loggin } from '../../store/slices/userSlice';
+import { LoginString } from '../../store/localStorage';
+import { errorAlert } from '../../utils';
+import { Link } from 'react-router-dom';
+import { handleLogin } from '../../store/apiCall';
 
 const Login = ({ history }) => {
-  const [userId, setuserId] = useState("");
-  const [password, setpassword] = useState("");
+  const [userId, setuserId] = useState('');
+  const [password, setpassword] = useState('');
   const [loading, setloading] = useState(false);
   const { register, handleSubmit, errors } = useForm();
   const dispatch = useDispatch();
@@ -33,108 +33,106 @@ const Login = ({ history }) => {
   const handleSignin = () => {
     setloading(true);
     axios
-      .post("/signin", { userID: userId, password })
-      .then((res) => {
+      .post('/signin', { userID: userId, password })
+      .then(res => {
         const { data } = res;
         setloading(false);
         if (data.success === true) {
           const user = data?.user;
           handleLogin(user);
-          history.push("/");
+          history.push('/');
         } else {
           console.log(data);
           errorAlert(data.error);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         setloading(false);
-        errorAlert("Connection  error try again later");
+        errorAlert('Connection  error try again later');
       });
   };
 
   return (
-    <div className="c-app c-default-layout flex-row align-items-center">
+    <div className='c-app c-default-layout flex-row align-items-center'>
       <CContainer>
-        <CRow className="justify-content-center">
-          <CCol md="8">
+        <CRow className='justify-content-center'>
+          <CCol md='8'>
             <CCardGroup>
-              <CCard className="p-4">
+              <CCard className='p-4'>
                 <CCardBody>
                   <CForm>
                     <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
-                    <CInputGroup className="mb-3">
+                    <p className='text-muted'>Sign In to your account</p>
+                    <CInputGroup className='mb-3'>
                       <CInputGroupPrepend>
                         <CInputGroupText>
-                          <CIcon name="cil-user" />
+                          <CIcon name='cil-user' />
                         </CInputGroupText>
                       </CInputGroupPrepend>
                       <input
                         value={userId}
-                        className="form-control  col-6"
-                        name="userId"
+                        className='form-control  col-6'
+                        name='userId'
                         ref={register({ required: true })}
-                        onChange={(e) => setuserId(e.target.value)}
-                        type="text"
+                        onChange={e => setuserId(e.target.value)}
+                        type='text'
                         required
-                        placeholder="ID"
-                        autoComplete="username"
+                        placeholder='ID'
+                        autoComplete='username'
                       />
                       <br />
                     </CInputGroup>
                     {errors.userId && (
-                      <span className=" form-error text-danger mb-2">
+                      <span className=' form-error text-danger mb-2'>
                         This field is required
                       </span>
                     )}
-                    <CInputGroup className="mb-4">
+                    <CInputGroup className='mb-4'>
                       <CInputGroupPrepend>
                         <CInputGroupText>
-                          <CIcon name="cil-lock-locked" />
+                          <CIcon name='cil-lock-locked' />
                         </CInputGroupText>
                       </CInputGroupPrepend>
                       <input
-                        type="password"
-                        className="form-control  col-6"
-                        placeholder="Password"
-                        name="password"
+                        type='password'
+                        className='form-control  col-6'
+                        placeholder='Password'
+                        name='password'
                         ref={register({ required: true })}
                         value={password}
                         required
-                        onChange={(e) => setpassword(e.target.value)}
-                        autoComplete="current-password"
+                        onChange={e => setpassword(e.target.value)}
+                        autoComplete='current-password'
                       />
                       <br />
                     </CInputGroup>
                     {errors.password && (
-                      <span className="form-error text-danger mb-2">
+                      <span className='form-error text-danger mb-2'>
                         This field is required
                       </span>
                     )}
                     <CRow>
-                      <CCol xs="6" className="mb-3">
-                        <Link to="/password/forget">Forget password</Link>
+                      <CCol xs='6' className='mb-3'>
+                        <Link to='/password/forget'>Forget password</Link>
                       </CCol>
                     </CRow>
                     <CRow>
-                      <CCol xs="6">
+                      <CCol xs='6'>
                         <p></p>
                         <CButton
                           disabled={loading}
                           onClick={handleSubmit(handleSignin)}
-                          type="submit"
-                          color="primary"
-                          className="px-4"
-                        >
+                          type='submit'
+                          color='primary'
+                          className='px-4'>
                           {loading ? (
                             <>
                               <span
-                                className="spinner-border spinner-border-sm"
-                                role="status"
-                                aria-hidden="true"
-                              ></span>
-                              <span className="visually-hidden">
+                                className='spinner-border spinner-border-sm'
+                                role='status'
+                                aria-hidden='true'></span>
+                              <span className='visually-hidden'>
                                 Loading...
                               </span>
                             </>
@@ -148,17 +146,15 @@ const Login = ({ history }) => {
                 </CCardBody>
               </CCard>
               <CCard
-                className="text-white bg-primary py-5 d-md-down-none"
-                style={{ width: "44%" }}
-              >
-                <CCardBody className="text-center">
+                className='text-white bg-primary py-5 d-md-down-none'
+                style={{ width: '44%' }}>
+                <CCardBody className='text-center'>
                   <div>
-                    <img src={logo} alt="logo" />
+                    {/* <img src={logo} alt='logo' /> */}
                     <h2>Welcome Back</h2>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
+                      i-Novotek school management system. Manage your school
+                      effective and with ease{' '}
                     </p>
                   </div>
                 </CCardBody>
