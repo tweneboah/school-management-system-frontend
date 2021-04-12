@@ -33,7 +33,7 @@ const MessageAdmin = React.lazy(() =>
 const MessageStudent = React.lazy(() =>
   import("../../TeachersComponents/message/MessageStudent")
 );
-
+const Chat = React.lazy(() => import("../../AdminComponents/messages/Chat"));
 //settings
 const Settings = React.lazy(() =>
   import("../../TeachersComponents/settings/SettingsPage")
@@ -47,6 +47,10 @@ const Notifications = React.lazy(() =>
 //academics
 const Classes = React.lazy(() =>
   import("../../TeachersComponents/academics/AllClasses")
+);
+
+const ClassDetails = React.lazy(() =>
+  import("../../TeachersComponents/academics/ClassDetails")
 );
 const ClassesAttendance = React.lazy(() =>
   import("../../components/class/AttendancePastRecords")
@@ -68,6 +72,12 @@ const ViewCalendar = React.lazy(() =>
 );
 const Calendar = React.lazy(() =>
   import("../../AdminComponents/academics/calender/Calender")
+);
+
+const SBA = React.lazy(() => import("../../TeachersComponents/academics/SBA"));
+
+const CourseReports = React.lazy(() =>
+  import("../../TeachersComponents/academics/CourseReport")
 );
 
 //canteen
@@ -101,6 +111,17 @@ const routes = [
     name: "Messages",
     exact: true,
     component: Messages,
+  },
+  {
+    path: "/messages/chat",
+    exact: true,
+    name: "Messages",
+    component: Chat,
+  },
+  {
+    path: "/messages/chat/:id",
+    name: "Messages",
+    component: Chat,
   },
   {
     path: "/students/:id",
@@ -141,14 +162,20 @@ const routes = [
     exact: true,
   },
   {
+    path: "/academics/classes/:id",
+    name: "Classes Details",
+    component: ClassDetails,
+  },
+
+  {
     path: "/academics/courses",
     name: "Courses",
     exact: true,
     component: Courses,
   },
   {
-    path: "/academics/courses/add/:id",
-    name: "Courses",
+    path: "/academics/courses/add/:id/:classID",
+    name: "Courses Notes",
     component: AddCourseNotes,
   },
   {
@@ -158,14 +185,25 @@ const routes = [
     component: Calendar,
   },
   {
-    path: "/academics/calendar/view",
+    path: "/academics/calender/view",
     name: "View Calendar",
     component: ViewCalendar,
   },
   {
-    path: "/academics/courses/:id",
+    path: "/academics/courses/:id/:classID",
     name: "Course Details",
+    exact: true,
     component: CourseDetails,
+  },
+  {
+    path: "/academics/courses/sba/:id/:classID",
+    name: "Course SBA",
+    component: SBA,
+  },
+  {
+    path: "/academics/courses/report/:id/:classID",
+    name: "Course Report",
+    component: CourseReports,
   },
   {
     path: "/profile",

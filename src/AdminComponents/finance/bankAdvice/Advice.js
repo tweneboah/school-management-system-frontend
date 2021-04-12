@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Letter from "./Letter";
-import { selectFees, selectYearGroup } from "../../../store/slices/schoolSlice";
+import { selectStaff } from "../../../store/slices/schoolSlice";
 import Search from "./Search";
 import axios from "../../../store/axios";
-import { errorAlert } from "../../../utils";
+import { errorAlert, getYearsPast, currentCurrency } from "../../../utils";
 import ViewAdvice from "./ViewAdvice";
 
 function Advice() {
@@ -13,15 +13,20 @@ function Advice() {
   const [year, setyear] = useState("");
   const [month, setmonth] = useState("");
   const [bank, setbank] = useState("");
+  const years = getYearsPast(10);
+  const teachers = useSelector(selectStaff);
   const [body, setbody] = useState(
     "We attached herewith cheque No {cheque_number_here} {bank_name_here}, and amount of GH¢ 0.00 ( ) being salaries for March, 2021 in respect of the names below."
   );
   const [author, setauthor] = useState("The Accountant");
-  const years = useSelector(selectYearGroup);
-  const [staff, setstaff] = useState([]);
+  const [staff, setstaff] = useState({});
   const [loading, setloading] = useState(false);
   const [showLetter, setshowLetter] = useState(false);
   const [open, setOpen] = useState(false);
+  const [selectedyear, setselectedyear] = useState("");
+  const [selectedmonth, setselectedmonth] = useState("");
+  const [selectedbank, setselectedbank] = useState("");
+  const [salary, setsalary] = useState("");
 
   const getStaff = (e) => {
     setbank(e.target.value);
@@ -38,11 +43,15 @@ function Advice() {
       return errorAlert("Bank is required");
     }
     setloading(true);
-    axios.get(`/teachers/bank/${bank}`).then((res) => {
-      console.log(res);
+    axios.get(`/teachers/${bank}`).then(async (res) => {
+      let salary = await axios.get(`/payrow/${res.data.teacher?.position}`);
       setloading(false);
       setshowLetter(true);
-      setstaff(res.data.docs);
+      setstaff(res.data.teacher);
+      setselectedmonth(month);
+      setselectedyear(year);
+      setsalary(salary.data.docs.salary);
+      setselectedbank(res.data.teacher?.bank);
     });
   };
 
@@ -56,6 +65,7 @@ function Advice() {
           bank={bank}
           setbank={getStaff}
           month={month}
+          teachers={teachers}
           setmonth={setmonth}
           years={years}
           loading={loading}
@@ -71,16 +81,18 @@ function Advice() {
             subject={subject}
             body={body}
             staff={staff}
-            month={month}
-            bank={bank}
-            year={year}
+            salary={salary}
+            month={selectedmonth}
+            bank={selectedbank}
+            year={selectedyear}
             setbody={setbody}
             author={author}
             setauthor={setauthor}
+            currentCurrency={currentCurrency}
           />
 
-          {staff.length === 0 && (
-            <div>
+          {staff && (
+            <div className="text-center">
               <button onClick={() => setOpen(true)} className="btn blue__btn">
                 View / Print Report
               </button>
@@ -90,13 +102,15 @@ function Advice() {
       )}
       <ViewAdvice
         salutations={salutations}
-        month={month}
-        year={year}
+        month={selectedmonth}
+        year={selectedyear}
         staff={staff}
         subject={subject}
         open={open}
         body={body}
+        salary={salary}
         author={author}
+        currentCurrency={currentCurrency}
         setOpen={setOpen}
       />
     </div>

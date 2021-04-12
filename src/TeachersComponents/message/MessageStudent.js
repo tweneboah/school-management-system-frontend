@@ -22,6 +22,9 @@ function MessageStudent() {
         errorAlert(res.data.error);
         return 0;
       }
+      if (res.data.users.length <= 0) {
+        return errorAlert("No students Find");
+      }
       setsearch("");
       setrecipientsOptions(
         res.data.users.map((user) => {
@@ -60,7 +63,7 @@ function MessageStudent() {
     e.preventDefault();
     if (message && recipient) {
       axios
-        .post(`/chats`, {
+        .post(`/chats/user`, {
           message,
           sender: sender?.id,
           userID: recipient,
@@ -111,7 +114,7 @@ function MessageStudent() {
               Choose...
             </option>
             {classes.map((e) => (
-              <option key={e._id} value={e._id}>
+              <option key={e._id} value={e.classCode}>
                 {e.name}
               </option>
             ))}

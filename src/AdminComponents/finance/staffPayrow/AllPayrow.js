@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { selectStaff } from "../../../store/slices/schoolSlice";
 import axios from "../../../store/axios";
 import { Link } from "react-router-dom";
-import { errorAlert } from "../../../utils";
+import { errorAlert, currentCurrency } from "../../../utils";
 import { useHistory } from "react-router-dom";
 
 const tableHeader = [
@@ -13,8 +13,8 @@ const tableHeader = [
   { id: "userID", name: "Staff ID" },
   { id: "name", name: "Name" },
   { id: "bank", name: "Bank" },
-  { id: "acount", name: "Account Number" },
-  { id: "amount", name: "Total Salary ($)" },
+  { id: "accountNumber", name: "Account Number" },
+  { id: "amount", name: `Total Salary (${currentCurrency()})` },
 ];
 
 function PayrowAll() {
@@ -108,6 +108,7 @@ function PayrowAll() {
         data={data}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
+        noData="No salary payments yet"
         tableHeader={tableHeader}
       />
     </div>

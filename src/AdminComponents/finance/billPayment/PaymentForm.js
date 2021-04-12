@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { bankOptions } from "../../../data";
-import NumberFormat from "react-number-format";
+import { useSelector } from "react-redux";
+import { selectYearGroup } from "../../../store/slices/schoolSlice";
+import { currentCurrency } from "../../../utils";
 
 function PaymentForm({
   applyTo,
@@ -27,6 +29,7 @@ function PaymentForm({
   setpaymentType,
 }) {
   const { register, handleSubmit, errors } = useForm();
+  //const years = useSelector(selectYearGroup);
 
   const handleSelectall = (e) => {
     setapplyTo({
@@ -43,26 +46,45 @@ function PaymentForm({
     <div className="content__container">
       <form action="">
         <div className="row mb-3">
+          <label className="col-sm-3 col-form-label">Fees Due</label>
+          <div className="col-md-6">
+            <div class="input-group">
+              <div class="input-group-text">{currentCurrency()}</div>
+              <input
+                type="number"
+                value={balance}
+                readOnly
+                className="form-control"
+                name="amount"
+              />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <button
+              type="button"
+              onClick={() => setamount(balance)}
+              className="btn blue__btn"
+            >
+              Pay All
+            </button>
+          </div>
+        </div>
+        <div className="row mb-3">
           <label className="col-sm-3 col-form-label">Amount</label>
           <div className="col-sm-9">
-            <strong className="text-info ">
-              Fees Due &nbsp;
-              <NumberFormat
-                value={balance}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"$"}
+            <div class="input-group">
+              <div class="input-group-text">{currentCurrency()}</div>
+              <input
+                type="number"
+                ref={register({ required: true, max: balance + 1 })}
+                value={amount}
+                onChange={(e) => setamount(e.target.value)}
+                className="form-control"
+                name="amount"
+                placeholder="Enter amount in $"
               />
-            </strong>
-            <input
-              type="number"
-              ref={register({ required: true, max: balance })}
-              value={amount}
-              onChange={(e) => setamount(e.target.value)}
-              className="form-control"
-              name="amount"
-              placeholder="Enter amount in $"
-            />
+            </div>
+
             {errors.amount && (
               <div className="text-danger">
                 Amount is required and it should not be above {balance}{" "}
@@ -82,38 +104,6 @@ function PaymentForm({
               name="date"
             />
             {errors.date && (
-              <div className="text-danger">This field is required</div>
-            )}
-          </div>
-        </div>
-        <div className="row mb-3">
-          <label className="col-sm-3 col-form-label">Academic Year</label>
-          <div className="col-sm-9">
-            <input
-              type="text"
-              value={year}
-              ref={register({ required: true })}
-              onChange={(e) => setyear(e.target.value)}
-              className="form-control"
-              name="year"
-            />
-            {errors.year && (
-              <div className="text-danger">This field is required</div>
-            )}
-          </div>
-        </div>
-        <div className="row mb-3">
-          <label className="col-sm-3 col-form-label">Term</label>
-          <div className="col-sm-9">
-            <input
-              type="text"
-              value={term}
-              ref={register({ required: true })}
-              onChange={(e) => setterm(e.target.value)}
-              className="form-control"
-              name="term"
-            />
-            {errors.term && (
               <div className="text-danger">This field is required</div>
             )}
           </div>

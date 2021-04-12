@@ -56,6 +56,7 @@ const _nav = [
         name: "Courses",
         to: "/academics/courses",
       },
+
       {
         _tag: "CSidebarNavItem",
         name: "School Calendar",
@@ -86,6 +87,11 @@ const _nav = [
         _tag: "CSidebarNavItem",
         name: "Inbox",
         to: "/messages",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Chat",
+        to: "/messages/chat",
       },
       {
         _tag: "CSidebarNavItem",

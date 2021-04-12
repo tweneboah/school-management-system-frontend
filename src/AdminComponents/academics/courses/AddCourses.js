@@ -1,8 +1,11 @@
+/* eslint-disable array-callback-return */
 import React, { useState } from "react";
 import AddForm from "./CourseForm";
 import GoBack from "../../shared/GoBack";
 import axios from "../../../store/axios";
 import { errorAlert, successAlert } from "../../../utils";
+import { useDispatch, useSelector } from "react-redux";
+import { setCourses, selectCourses } from "../../../store/slices/schoolSlice";
 
 function AddCourses() {
   const [name, setname] = useState("");
@@ -10,18 +13,38 @@ function AddCourses() {
   const [loading, setloading] = useState("");
   const [type, settype] = useState("");
   const [teacher, setteacher] = useState("");
-  const [classesArr, setclassesArr] = useState([]);
+  const [classesArr, setclassesArr] = useState([
+    { _id: "", teacher: "", class: "" },
+  ]);
   const [classID, setclassID] = useState("");
+  const dispatch = useDispatch();
+  const courses = useSelector(selectCourses);
 
   const handleSetclasses = (e) => {
-    console.log(e);
     setclassID(e);
     let newClasses = classesArr.push(e);
     setclassesArr(newClasses);
   };
 
+  const handleUniqueVal = (arr) => {
+    let unique = [];
+    arr.map((i) => {
+      let check = unique.find(
+        (e) => e.class === i.class || e.teacher === i.teacher
+      );
+      if (!check) {
+        unique.push(i);
+      }
+    });
+    return unique;
+  };
+
   const handleAddCourse = () => {
     setloading(true);
+    let classesData = classesArr.filter(
+      (e) => e.class !== "" || e.teacher !== ""
+    );
+    let classes = handleUniqueVal(classesData);
     axios
       .post("/courses/create", {
         name,
@@ -29,7 +52,7 @@ function AddCourses() {
         type,
         teacher,
         classID,
-        classes: classesArr,
+        classes,
       })
       .then((res) => {
         if (res.data.error) {
@@ -37,12 +60,14 @@ function AddCourses() {
           errorAlert(res.data.error);
           return 0;
         }
+        dispatch(setCourses([res.data.doc, ...courses]));
         setloading(false);
         successAlert("successfull added");
         setname("");
         setcode("");
         setteacher("");
         settype("");
+        setclassesArr([]);
       })
       .catch(() => {
         setloading(false);
@@ -64,6 +89,8 @@ function AddCourses() {
           teacher={teacher}
           setteacher={setteacher}
           type={type}
+          setclassesArr={setclassesArr}
+          classesArr={classesArr}
           classID={classID}
           settype={settype}
           loadin={loading}

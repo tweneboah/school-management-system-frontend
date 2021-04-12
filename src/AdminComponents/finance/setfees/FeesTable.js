@@ -13,6 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import TablePaginationActions from "../../shared/TablePagination";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import EditIcon from "@material-ui/icons/Edit";
+import { currentCurrency } from "../../../utils";
 
 const useStyles2 = makeStyles({
   table: {
@@ -48,6 +49,8 @@ export default function CustomPaginationActionsTable({
     return total;
   };
 
+  let sign = currentCurrency();
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="custom pagination table">
@@ -77,32 +80,47 @@ export default function CustomPaginationActionsTable({
                     {row?.name}
                   </TableCell>
                   <TableCell align="left" style={{ width: 250 }}>
-                    <div className="d-flex flex-column justify-content-around">
-                      <ul className="fees">
-                        {row?.day?.tution ? (
-                          <li> Tution Fee = {row?.day?.tution} </li>
-                        ) : (
-                          "-"
-                        )}
-                        {row?.day?.facility ? (
-                          <li> Facility Fee = {row?.day?.facility} </li>
-                        ) : (
-                          "-"
-                        )}
-                        {row?.day?.maintenance ? (
-                          <li>Maintenance fee = {row?.day?.maintenance} </li>
-                        ) : (
-                          "-"
-                        )}
-                        {row?.day?.exam ? (
-                          <li> Exam Fee = {row?.day?.exam} </li>
-                        ) : (
-                          "-"
-                        )}
-                      </ul>
+                    <ul className="fees">
+                      {row?.day?.tution ? (
+                        <li>
+                          {" "}
+                          Tution Fee ={sign}
+                          {row?.day?.tution}{" "}
+                        </li>
+                      ) : (
+                        "."
+                      )}
+                      {row?.day?.facility ? (
+                        <li>
+                          {" "}
+                          Facility Fee = {sign}
+                          {row?.day?.facility}{" "}
+                        </li>
+                      ) : (
+                        "."
+                      )}
+                      {row?.day?.maintenance ? (
+                        <li>
+                          Maintenance fee = {sign}
+                          {row?.day?.maintenance}{" "}
+                        </li>
+                      ) : (
+                        "."
+                      )}
+                      {row?.day?.exam ? (
+                        <li>
+                          {" "}
+                          Exam Fee = {sign}
+                          {row?.day?.exam}{" "}
+                        </li>
+                      ) : (
+                        "."
+                      )}
+                    </ul>
+                    {row?.day && (
                       <div className="d-flex flex-row justify-content-between align-items-center">
                         <strong className="text-info">
-                          Total{" "}
+                          Total: {sign}{" "}
                           {getTotal(
                             row?.day?.tution,
                             row?.day?.facility,
@@ -122,153 +140,191 @@ export default function CustomPaginationActionsTable({
                           <EditIcon />
                         </IconButton>
                       </div>
-                    </div>
+                    )}
                   </TableCell>
                   <TableCell align="left" style={{ width: 250 }}>
                     <ul className="fees">
                       {row?.freshDay?.tution ? (
-                        <li> Tution Fee = {row?.freshDay?.tution} </li>
+                        <li>
+                          {" "}
+                          Tution Fee = {sign}
+                          {row?.freshDay?.tution}{" "}
+                        </li>
                       ) : (
                         "-"
                       )}
                       {row?.freshDay?.facility ? (
-                        <li> Facility Fee = {row?.freshDay?.facility} </li>
+                        <li>
+                          {" "}
+                          Facility Fee ={sign} {row?.freshDay?.facility}{" "}
+                        </li>
                       ) : (
                         "-"
                       )}
                       {row?.freshDay?.maintenance ? (
                         <li className="d-flex">
-                          Maintenance fee = {row?.freshDay?.maintenance}{" "}
+                          Maintenance fee = {sign} {row?.freshDay?.maintenance}{" "}
                         </li>
                       ) : (
                         "-"
                       )}
                       {row?.freshDay?.exam ? (
-                        <li> Exam Fee = {row?.freshDay?.exam} </li>
+                        <li>
+                          {" "}
+                          Exam Fee = {sign} {row?.freshDay?.exam}{" "}
+                        </li>
                       ) : (
                         "-"
                       )}
                     </ul>
-                    <div className="d-flex flex-row justify-content-between align-items-center">
-                      <strong className="text-info">
-                        Total{" "}
-                        {getTotal(
-                          row?.freshDay?.tution,
-                          row?.freshDay?.facility,
-                          row?.freshDay?.maintenance,
-                          row?.freshDay?.exam
-                        )}
-                      </strong>
-                      <IconButton
-                        onClick={() =>
-                          handleEdit({
-                            ...row.freshDay,
-                            classID: row.name,
-                            type: "freshDay",
-                          })
-                        }
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </div>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 250 }}>
-                    <div className="d-flex flex-column justify-content-around">
-                      <ul className="fees">
-                        {row?.border?.tution ? (
-                          <li> Tution Fee = {row?.border?.tution} </li>
-                        ) : (
-                          "-"
-                        )}
-                        {row?.border?.facility ? (
-                          <li> Facility Fee = {row?.border?.facility} </li>
-                        ) : (
-                          "-"
-                        )}
-                        {row?.border?.maintenance ? (
-                          <li className="d-flex">
-                            Maintenance fee = {row?.border?.maintenance}{" "}
-                          </li>
-                        ) : (
-                          "-"
-                        )}
-                        {row?.border?.exam ? (
-                          <li> Exam Fee = {row?.border?.exam} </li>
-                        ) : (
-                          "-"
-                        )}
-                      </ul>
-                      <div className="d-flex justify-content-between align-items-center">
+                    {row?.freshDay && (
+                      <div className="d-flex flex-row justify-content-between align-items-center">
                         <strong className="text-info">
-                          Total:{" "}
+                          Total: {sign}{" "}
                           {getTotal(
-                            row?.border?.tution,
-                            row?.border?.facility,
-                            row?.border?.maintenance,
-                            row?.border?.exam
-                          ) || 0}
+                            row?.freshDay?.tution,
+                            row?.freshDay?.facility,
+                            row?.freshDay?.maintenance,
+                            row?.freshDay?.exam
+                          )}
                         </strong>
                         <IconButton
                           onClick={() =>
                             handleEdit({
-                              ...row.border,
+                              ...row.freshDay,
                               classID: row.name,
-                              type: "border",
+                              type: "freshDay",
                             })
                           }
                         >
                           <EditIcon />
                         </IconButton>
                       </div>
+                    )}
+                  </TableCell>
+                  <TableCell align="left" style={{ width: 250 }}>
+                    <div className="d-flex flex-column justify-content-around">
+                      <ul className="fees">
+                        {row?.border?.tution ? (
+                          <li>
+                            {" "}
+                            Tution Fee = {sign}
+                            {row?.border?.tution}{" "}
+                          </li>
+                        ) : (
+                          "."
+                        )}
+                        {row?.border?.facility ? (
+                          <li>
+                            {" "}
+                            Facility Fee = {sign} {row?.border?.facility}{" "}
+                          </li>
+                        ) : (
+                          "."
+                        )}
+                        {row?.border?.maintenance ? (
+                          <li className="d-flex">
+                            Maintenance fee = {sign} {row?.border?.maintenance}{" "}
+                          </li>
+                        ) : (
+                          "."
+                        )}
+                        {row?.border?.exam ? (
+                          <li>
+                            {" "}
+                            Exam Fee = {sign} {row?.border?.exam}{" "}
+                          </li>
+                        ) : (
+                          "."
+                        )}
+                      </ul>
+                      {row?.border && (
+                        <div className="d-flex justify-content-between align-items-center">
+                          <strong className="text-info">
+                            Total: {sign}
+                            {getTotal(
+                              row?.border?.tution,
+                              row?.border?.facility,
+                              row?.border?.maintenance,
+                              row?.border?.exam
+                            ) || 0}
+                          </strong>
+                          <IconButton
+                            onClick={() =>
+                              handleEdit({
+                                ...row.border,
+                                classID: row.name,
+                                type: "border",
+                              })
+                            }
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </div>
+                      )}
                     </div>
                   </TableCell>
                   <TableCell align="left" style={{ width: 250 }}>
                     <ul className="fees">
                       {row?.freshBorder?.tution ? (
-                        <li> Tution Fee = {row?.freshBorder?.tution} </li>
+                        <li>
+                          {" "}
+                          Tution Fee = {sign}
+                          {row?.freshBorder?.tution}
+                        </li>
                       ) : (
-                        "-"
+                        "."
                       )}
                       {row?.freshBorder?.facility ? (
-                        <li> Facility Fee = {row?.freshBorder?.facility} </li>
+                        <li>
+                          {" "}
+                          Facility Fee ={sign} {row?.freshBorder?.facility}{" "}
+                        </li>
                       ) : (
-                        "-"
+                        "."
                       )}
                       {row?.freshBorder?.maintenance ? (
                         <li>
-                          Maintenance fee = {row?.freshBorder?.maintenance}{" "}
+                          Maintenance fee ={sign}{" "}
+                          {row?.freshBorder?.maintenance}{" "}
                         </li>
                       ) : (
-                        "-"
+                        "."
                       )}
                       {row?.freshBorder?.exam ? (
-                        <li> Exam Fee = {row?.freshBorder?.exam} </li>
+                        <li>
+                          {" "}
+                          Exam Fee = {sign}
+                          {row?.freshBorder?.exam}{" "}
+                        </li>
                       ) : (
-                        "-"
+                        "."
                       )}
                     </ul>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <strong className="text-info">
-                        Total{" "}
-                        {getTotal(
-                          row?.freshBorder?.tution,
-                          row?.freshBorder?.facility,
-                          row?.freshBorder?.maintenance,
-                          row?.freshBorder?.exam
-                        )}
-                      </strong>
-                      <IconButton
-                        onClick={() =>
-                          handleEdit({
-                            ...row.freshBorder,
-                            classID: row.name,
-                            type: "freshBorder",
-                          })
-                        }
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </div>
+                    {row?.freshBorder && (
+                      <div className="d-flex justify-content-between align-items-center">
+                        <strong className="text-info">
+                          Total: {sign}
+                          {getTotal(
+                            row?.freshBorder?.tution,
+                            row?.freshBorder?.facility,
+                            row?.freshBorder?.maintenance,
+                            row?.freshBorder?.exam
+                          )}
+                        </strong>
+                        <IconButton
+                          onClick={() =>
+                            handleEdit({
+                              ...row.freshBorder,
+                              classID: row.name,
+                              type: "freshBorder",
+                            })
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell align="left">
                     <div className="d-flex  align-items-center">
@@ -281,7 +337,14 @@ export default function CustomPaginationActionsTable({
               ))}{" "}
             </>
           ) : (
-            <>No data</>
+            <TableRow>
+              <TableCell
+                colSpan={tableHeader.length + 1}
+                className="text-center text-danger"
+              >
+                Fees not set yet
+              </TableCell>
+            </TableRow>
           )}
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>

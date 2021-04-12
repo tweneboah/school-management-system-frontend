@@ -6,7 +6,7 @@ import axios from "../../../store/axios";
 import Edit from "./EditPayrow";
 import { selectUser } from "../../../store/slices/userSlice";
 import { useSelector } from "react-redux";
-import { errorAlert, successAlert } from "../../../utils";
+import { errorAlert, successAlert, currentCurrency } from "../../../utils";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 function PaymentPlan() {
@@ -27,6 +27,8 @@ function PaymentPlan() {
     });
   }, []);
 
+  let sign = currentCurrency();
+
   const handleAddPlans = () => {
     setloading(true);
     axios
@@ -36,7 +38,7 @@ function PaymentPlan() {
         allowance,
         bonus,
       })
-      .then((res) => {
+      .then(async (res) => {
         if (res.data.error) {
           errorAlert(res.data.error);
           return 0;
@@ -49,6 +51,10 @@ function PaymentPlan() {
         setname("");
         successAlert("Changes Saved");
         setplanData([res.data.doc, ...planData]);
+        await axios.post("/activitylog/create", {
+          activity: ` ${name} payrow was created`,
+          user: "admin",
+        });
       })
       .catch(() => {
         setloading(false);
@@ -74,7 +80,7 @@ function PaymentPlan() {
         allowance,
         bonus,
       })
-      .then((res) => {
+      .then(async (res) => {
         setloading(false);
         if (res.data.error) {
           errorAlert(res.data.error);
@@ -90,6 +96,10 @@ function PaymentPlan() {
         let index = planData.findIndex((e) => e._id === editID);
         newData[index] = res.data.doc;
         setplanData(newData);
+        await axios.post("/activitylog/create", {
+          activity: ` ${name} payrow was edited`,
+          user: "admin",
+        });
       })
       .catch((err) => {
         setloading(false);
@@ -116,8 +126,7 @@ function PaymentPlan() {
 
   return (
     <div>
-      {/* <CanteenNav /> */}
-      <h3 className="my-5">Staff Payrow Details</h3>
+      <h3 className="my-5">Staff Roles and Payrow Details</h3>
       <table className="table content__container">
         <thead>
           <tr>
@@ -130,17 +139,17 @@ function PaymentPlan() {
             </th>
             <th>
               <h5>
-                <strong>Salary</strong>
+                <strong> Salary ({sign})</strong>
               </h5>
             </th>
             <th>
               <h5>
-                <strong>Allowance</strong>
+                <strong> Allowance ({sign})</strong>
               </h5>
             </th>
             <th>
               <h5>
-                <strong>Bonus</strong>
+                <strong> Bonus ({sign})</strong>
               </h5>
             </th>
             {user?.role === "admin" && (

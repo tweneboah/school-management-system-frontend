@@ -10,6 +10,8 @@ import Slide from "@material-ui/core/Slide";
 import ListTable from "../../shared/ListTable";
 import NumberFormat from "react-number-format";
 import { Link } from "react-router-dom";
+import { monthYear } from "../../../data";
+import { currentCurrency } from "../../../utils";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -51,6 +53,13 @@ export default function ViewStudentPayment({
     setOpen(false);
   };
 
+  const data = transactions.map((e) => {
+    return {
+      ...e,
+      month: monthYear[e.month].name,
+    };
+  });
+
   return (
     <Dialog
       fullScreen
@@ -68,7 +77,7 @@ export default function ViewStudentPayment({
                 value={totalBill}
                 displayType={"text"}
                 thousandSeparator={true}
-                prefix={"$"}
+                prefix={currentCurrency()}
               />
             </strong>{" "}
             <br />
@@ -78,7 +87,7 @@ export default function ViewStudentPayment({
                 value={totalPaid}
                 displayType={"text"}
                 thousandSeparator={true}
-                prefix={"$"}
+                prefix={currentCurrency()}
               />
             </strong>{" "}
             <br />
@@ -88,7 +97,7 @@ export default function ViewStudentPayment({
                 value={balance}
                 displayType={"text"}
                 thousandSeparator={true}
-                prefix={"$"}
+                prefix={currentCurrency()}
               />
             </strong>
             <br />
@@ -106,11 +115,7 @@ export default function ViewStudentPayment({
         </Toolbar>
       </AppBar>
       <div className="mt-5">
-        <ListTable
-          noActions={true}
-          data={transactions}
-          tableHeader={tableHeader}
-        />
+        <ListTable noActions={true} data={data} tableHeader={tableHeader} />
       </div>
     </Dialog>
   );

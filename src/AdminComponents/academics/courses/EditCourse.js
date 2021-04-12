@@ -3,7 +3,6 @@ import EditForm from "./CourseForm";
 import axios from "../../../store/axios";
 import { useParams } from "react-router-dom";
 import { errorAlert, successAlert } from "../../../utils";
-import GoBack from "../../shared/GoBack";
 
 function EditCourse() {
   const [name, setname] = useState("");
@@ -20,8 +19,22 @@ function EditCourse() {
     setclassesArr([...classesArr, e]);
   };
 
+  const handleUniqueVal = (arr) => {
+    let unique = [];
+    arr.map((i) => {
+      let check = unique.find(
+        (e) => e.class === i.class && e.teacher === i.teacher
+      );
+      if (!check) {
+        unique.push(i);
+      }
+    });
+    return unique;
+  };
+
   useEffect(() => {
     axios.get(`/courses/${id}`).then((res) => {
+      console.log(res.data);
       if (res.data.error) {
         errorAlert(res.data.error);
         return 0;
@@ -32,11 +45,17 @@ function EditCourse() {
       settype(docs?.type);
       setteacher(docs?.teacher);
       setcode(docs?.code);
+      setclassesArr(docs?.classes);
     });
   }, [id]);
 
   const handleEdit = () => {
     setloading(true);
+    let classesData = classesArr.filter(
+      (e) => e.class !== "" || e.teacher !== ""
+    );
+    let classes = handleUniqueVal(classesData);
+    console.log(classesData);
     axios
       .put(`/courses/update/${id}`, {
         name,
@@ -44,7 +63,7 @@ function EditCourse() {
         type,
         teacher,
         classID,
-        classes: classesArr,
+        classes,
       })
       .then((res) => {
         if (res.data.error) {
@@ -53,6 +72,7 @@ function EditCourse() {
         }
         successAlert("successfully edited");
         setloading(false);
+        console.log(classes);
       })
       .catch(() => {
         errorAlert("Something went wrong");
@@ -62,7 +82,7 @@ function EditCourse() {
 
   return (
     <>
-      <GoBack link="/academics/courses" name="Go back to Courses List" />
+      {/* <GoBack link="/academics/courses" name="Go back to Courses List" /> */}
       <div className="content__container">
         <h3 className="mb-4">Edit Course</h3>
         <EditForm
@@ -76,6 +96,8 @@ function EditCourse() {
           loading={loading}
           setname={setname}
           classID={classID}
+          classesArr={classesArr}
+          setclassesArr={setclassesArr}
           code={code}
           isEdit={true}
           setcode={setcode}

@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { studentStatus } from "../../../data";
 import {
   selectClasses,
@@ -46,13 +47,14 @@ function AcademicsDetails(props) {
     reasonforTransfer,
     isEdit,
     setreasonforTransfer,
-    handleCoursesCheckbox,
+    campus,
+    setcampus,
   } = props;
 
   return (
     <div>
       <h3>Academics Details</h3>
-      <div class="row mb-3">
+      <div className="row mb-3">
         {!isEdit && (
           <>
             <div className="col-xs-12 col-sm-6">
@@ -84,8 +86,8 @@ function AcademicsDetails(props) {
           </>
         )}
       </div>
-      <div class="row mb-3">
-        <div className="col-xs-12 col-sm-6 col-md-4 ">
+      <div className="row mb-3">
+        <div className="col-xs-12 col-sm-6 col-md-4 mb-3">
           <label className="form-label">Class</label>
           <select
             ref={register({ required: true })}
@@ -114,7 +116,7 @@ function AcademicsDetails(props) {
             </span>
           )}
         </div>
-        <div className="col-xs-12 col-sm-6 col-md-4">
+        <div className="col-xs-12 col-sm-6 col-md-4 mb-3">
           <label className="form-label">Section / House</label>
           <select
             value={section}
@@ -137,7 +139,7 @@ function AcademicsDetails(props) {
             )}
           </select>
         </div>
-        <div className="col-xs-12 col-sm-6 col-md-4">
+        <div className="col-xs-12 col-sm-6 col-md-4 mb-3">
           <label className="form-label">Divisions</label>
           <select
             value={division}
@@ -186,7 +188,7 @@ function AcademicsDetails(props) {
             </span>
           )}
         </div>
-        {status === "border" && (
+        {(status === "border" || status === "freshBorder") && (
           <div className="col-xs-12 col-sm-6 col-md-4">
             <label className="form-label">Dormitory</label>
             <select
@@ -212,7 +214,7 @@ function AcademicsDetails(props) {
           </div>
         )}
       </div>
-      <div class="row mb-3">
+      <div className="row mb-3">
         <div className="col-xs-12 col-sm-6  col-md-4">
           <label className="form-label">Scholarship</label>
           <select
@@ -236,6 +238,7 @@ function AcademicsDetails(props) {
             )}
           </select>
         </div>
+
         <div className="col-xs-12 col-sm-6  col-md-4">
           <label className="form-label">Fees Category</label>
           <select
@@ -258,13 +261,16 @@ function AcademicsDetails(props) {
               <option disabled>No data yet</option>
             )}
           </select>
+          {feesType.length <= 0 && (
+            <Link to="/academics/classgroups">Set fees</Link>
+          )}
         </div>
         <div className="col-xs-12 col-sm-6  col-md-4">
           <label className="form-label">Campus</label>
           <select
             name="feesCategory"
-            value={feesCategory}
-            onChange={(e) => setfeesCategory(e.target.value)}
+            value={campus}
+            onChange={(e) => setcampus(e.target.value)}
             className="form-select"
             aria-label="Default select example"
           >
@@ -283,42 +289,7 @@ function AcademicsDetails(props) {
           </select>
         </div>
       </div>
-      <div class="row mb-3">
-        {/* <div className="col-xs-12 col-sm-6 col-md-4">
-          <label className="form-label">Courses</label>
-          <div className="selectBox">
-            <select
-              defaultValue="courses"
-              onClick={() => setshowCheck(!showCheck)}
-              className="form-select"
-            >
-              <option hidden>Select options</option>
-            </select>
-            {showCheck && (
-              <div className="showcheckboxes">
-                {courses.length > 0 ? (
-                  <>
-                    {courses.map((e) => (
-                      <div key={e.code} value={e.code} className="form-check ">
-                        <input
-                          onChange={(event) => handleCoursesCheckbox(event)}
-                          className="form-check-input"
-                          type="checkbox"
-                          value={e.code}
-                          id="flexCheckDefault"
-                        />
-                        <label className="form-check-label">{e.name}</label>
-                      </div>
-                    ))}
-                  </>
-                ) : (
-                  <option disabled>No data yet</option>
-                )}
-              </div>
-            )}
-          </div> 
-        </div>*/}
-
+      <div className="row mb-3">
         <div className="col-xs-12 col-sm-6 col-md-4">
           <label className="form-label">Last School Attended</label>
           <input

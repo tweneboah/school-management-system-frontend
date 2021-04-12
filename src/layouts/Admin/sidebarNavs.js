@@ -114,16 +114,6 @@ const _nav = [
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Paye Deductions",
-        to: "/finance/staff/paydeductions",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Trustee Contribution",
-        to: "/finance/trustee",
-      },
-      {
-        _tag: "CSidebarNavItem",
         name: "SSNIT Contributions",
         to: "/finance/ssnit",
       },
@@ -188,6 +178,11 @@ const _nav = [
       },
       {
         _tag: "CSidebarNavItem",
+        name: "Past Classes",
+        to: "/academics/classes/past",
+      },
+      {
+        _tag: "CSidebarNavItem",
         name: "SBA",
         to: "/academics/sba",
       },
@@ -248,7 +243,7 @@ const _nav = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: " Fees",
+        name: "Set Fees",
         to: "/finance/fees",
       },
       {
@@ -338,11 +333,6 @@ const _nav = [
       <CIcon name="cil-notes" customClasses="c-sidebar-nav-icon  sidebarIcon" />
     ),
     _children: [
-      // {
-      //   _tag: "CSidebarNavItem",
-      //   name: "Store",
-      //   to: "/store",
-      // },
       {
         _tag: "CSidebarNavItem",
         name: "Inventory",
@@ -353,11 +343,6 @@ const _nav = [
         name: "Sales",
         to: "/store/sales",
       },
-      // {
-      //   _tag: "CSidebarNavItem",
-      //   name: "Reports",
-      //   to: "/store/reports",
-      // },
     ],
   },
   {
@@ -375,6 +360,11 @@ const _nav = [
         _tag: "CSidebarNavItem",
         name: "Inbox",
         to: "/messages",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Chat",
+        to: "/messages/chat",
       },
       {
         _tag: "CSidebarNavItem",

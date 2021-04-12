@@ -8,16 +8,11 @@ import Edit from "./EditModal";
 function SBA() {
   const [data, setdata] = useState([]);
   const [students, setstudents] = useState([]);
-
+  const [examMark, setexamMark] = useState("");
+  const [classWorkMark, setclassWorkMark] = useState("");
   const [exam, setexam] = useState("");
-  const [classWork, setclassWork] = useState({
-    a1: "",
-    a2: "",
-    a3: "",
-    a4: "",
-  });
+  const [classWork, setclassWork] = useState("");
   const [position, setposition] = useState("");
-  const [loading, setloading] = useState(false);
   const [openEdit, setopenEdit] = useState(false);
   const [term, setterm] = useState("");
   const [classID, setclassID] = useState("");
@@ -26,57 +21,86 @@ function SBA() {
   const [isSet, setisSet] = useState(false);
   const [selectedUser, setselectedUser] = useState({});
   const [loadingClass, setloadingClass] = useState(false);
+  const [loadingSubmit, setloadingSubmit] = useState(false);
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     setisSet(false);
+    setstudents([]);
+    setexamMark("");
+    setposition("");
+    setclassWorkMark("");
     e.preventDefault();
     if (classID === "" || term === "" || course === "" || year === "") {
       return errorAlert("Please select all fields");
     }
     setloadingClass(true);
-    axios.get(`/classes/classCode/${classID}`).then((res) => {
+    await axios.get(`/classes/classCode/${classID}`).then(async (res) => {
       if (!res.data.docs?.sba || res.data.docs?.sba === false) {
         setloadingClass(false);
         return errorAlert("SBA not set for this class");
       }
       setisSet(true);
-      axios.get(`/sba/${classID}/${course}/${year}/${term}`).then((result) => {
-        setloadingClass(false);
-        setdata(result.data.docs);
-        setstudents(result.data.docs?.students);
-      });
+      await axios
+        .get(`/sba/${classID}/${course}/${year}/${term}`)
+        .then((result) => {
+          setloadingClass(false);
+          let data = result.data.docs;
+          console.log(data);
+          setdata(data);
+          setclassWorkMark(data?.classWork);
+          setexamMark(data?.exam);
+          console.log(result.data);
+          setstudents(data?.students);
+        });
     });
   };
 
   const handleEdit = (id) => {
+    if (!classWorkMark) {
+      return errorAlert("Please set  classWork %");
+    }
+    if (!examMark) {
+      return errorAlert("Please set  exam score %");
+    }
     setopenEdit(true);
-    let selectedStudent = data.students.find((e) => e._id === id);
+    let selectedStudent = data.students.find((e) => e.userID === id);
     setselectedUser(selectedStudent);
     setexam(selectedStudent?.exam);
     setclassWork(selectedStudent?.classWork);
+    setposition(selectedStudent?.position);
   };
 
-  const handleonSubmit = () => {
-    setloading(true);
-    axios
-      .put(`/sba/update/student/${data?._id}/${selectedUser?._id}`, {
+  const handleonSubmit = async () => {
+    setloadingSubmit(true);
+
+    await axios.put(`/sba/update/${data?._id}`, {
+      exam: examMark,
+      classWork: classWorkMark,
+    });
+
+    await axios
+      .put(`/sba/update/student/${data?._id}/${selectedUser?.userID}`, {
         classWork,
         exam,
         userID: selectedUser?.userID,
         name: selectedUser?.name,
-        position: position,
+        position,
       })
       .then((res) => {
         setopenEdit(false);
-        setloading(false);
-        setstudents(res.data?.students);
+        setloadingSubmit(false);
+        setstudents(res.data.doc?.students);
         console.log(res.data);
+      })
+      .catch((err) => {
+        errorAlert("Failed");
+        setloadingSubmit(false);
       });
   };
 
   return (
     <div>
-      <h3>SBA</h3>
+      <h3>S.B.A</h3>
       <div className="mb-3">
         <Search
           academicYear={year}
@@ -91,14 +115,26 @@ function SBA() {
           handleSearch={handleSearch}
         />
       </div>
-      {isSet && <SBATable rows={students} handleEdit={handleEdit} />}
+      {isSet && (
+        <SBATable
+          setclassWork={setclassWork}
+          rows={students}
+          examMark={examMark}
+          setexamMark={setexamMark}
+          classworkMark={classWorkMark}
+          setclassworkMark={setclassWorkMark}
+          handleEdit={handleEdit}
+        />
+      )}
 
       <Edit
         name={selectedUser?.name}
         userID={selectedUser?.userID}
         exam={exam}
+        examMark={examMark}
+        classworkMark={classWorkMark}
         classID={classID}
-        loading={loading}
+        loading={loadingSubmit}
         setposition={setposition}
         position={position}
         setexam={setexam}

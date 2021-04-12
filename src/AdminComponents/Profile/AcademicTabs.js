@@ -14,20 +14,28 @@ function AcademicTabs({ count }) {
 
   return (
     <div>
-      <h3>Financial Reports</h3>
+      <h3>Academic Reports</h3>
       <div className="row">
         <div className="col-sm-6 col-md-4">
           <Card
             title="Division"
             name={count?.divisions || 0}
-            route="/divisions"
+            route="/academics/divisions"
           />
         </div>
         <div className="col-sm-6 col-md-4">
-          <Card title="Classes" name={count?.classes} route="/classes" />
+          <Card
+            title="Classes"
+            name={count?.classes}
+            route="/academics/classes"
+          />
         </div>
         <div className="col-sm-6 col-md-4">
-          <Card title="Courses" name={count?.courses} route="/classes" />
+          <Card
+            title="Courses"
+            name={count?.courses}
+            route="/academics/courses"
+          />
         </div>
         <div className="col-sm-6 col-md-4">
           <Card
@@ -43,20 +51,7 @@ function AcademicTabs({ count }) {
             route="/reports/classterminal"
           />
         </div>
-        <div className="col-sm-6 col-md-4">
-          <Card
-            title="Class Group Terminal Report"
-            name="Class Group Terminal Report"
-            route="/reports/classgroupterminal"
-          />
-        </div>
-        <div className="col-sm-6 col-md-4">
-          <Card
-            title="Year Group Terminal Report"
-            name="Year Group Terminal Report"
-            route="/reports/yeargroupterminal"
-          />
-        </div>
+
         <div className="col-sm-6 col-md-4">
           <Card
             title="Admission Report"
@@ -77,9 +72,6 @@ function AcademicTabs({ count }) {
             name="View "
             route="/reports/academic"
           />
-        </div>
-        <div className="col-sm-6 col-md-4">
-          <Card title="End of Year Report" name="View Report" route="/" />
         </div>
       </div>
 

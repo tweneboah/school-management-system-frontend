@@ -7,11 +7,11 @@ import NumberFormat from "react-number-format";
 import EditIcon from "@material-ui/icons/Edit";
 import { monthYear } from "../../data";
 import EditBank from "./EditBank";
-import { errorAlert, successAlert } from "../../utils";
+import { errorAlert, successAlert, currentCurrency } from "../../utils";
 
 const tableHeader = [
   { id: "date", name: "Date" },
-  { id: "amount", name: "Amount" },
+  { id: "amount", name: `Amount ${currentCurrency()}` },
   { id: "month", name: "For Month" },
 ];
 
@@ -45,7 +45,6 @@ function Payrow() {
         };
       });
       setpayrowData(monthData);
-
       let staffData = await axios.get(`/teachers/${user?.userID}`);
       let staff = staffData.data?.teacher;
       setaccountNumber(staff?.accountNumber);
@@ -122,7 +121,7 @@ function Payrow() {
                     value={payrowType?.salary}
                     displayType={"text"}
                     thousandSeparator={true}
-                    prefix={"$"}
+                    prefix={currentCurrency()}
                   />
                 </div>
               </div>
@@ -133,7 +132,7 @@ function Payrow() {
                     value={payrowType?.allowance}
                     displayType={"text"}
                     thousandSeparator={true}
-                    prefix={"$"}
+                    prefix={currentCurrency()}
                   />
                 </div>
               </div>
@@ -144,7 +143,7 @@ function Payrow() {
                     value={payrowType?.bonus}
                     displayType={"text"}
                     thousandSeparator={true}
-                    prefix={"$"}
+                    prefix={currentCurrency()}
                   />
                 </div>
               </div>
@@ -185,7 +184,7 @@ function Payrow() {
                       value={totalBill}
                       displayType={"text"}
                       thousandSeparator={true}
-                      prefix={"$"}
+                      prefix={currentCurrency()}
                     />
                   </td>
                 </tr>
@@ -196,7 +195,7 @@ function Payrow() {
                       value={totalPaid}
                       displayType={"text"}
                       thousandSeparator={true}
-                      prefix={"$"}
+                      prefix={currentCurrency()}
                     />
                   </td>
                 </tr>
@@ -210,7 +209,7 @@ function Payrow() {
                         value={balance}
                         displayType={"text"}
                         thousandSeparator={true}
-                        prefix={"$"}
+                        prefix={currentCurrency()}
                       />
                     </strong>
                   </td>

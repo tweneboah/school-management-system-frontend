@@ -18,6 +18,7 @@ const Notifications = React.lazy(() =>
 const Messages = React.lazy(() =>
   import("../../AdminComponents/messages/inbox/Messaging")
 );
+const Chat = React.lazy(() => import("../../AdminComponents/messages/Chat"));
 const GuadianMessages = React.lazy(() =>
   import("../../AdminComponents/messages/GuadianMessage")
 );
@@ -46,6 +47,9 @@ const EditCalenderEvent = React.lazy(() =>
 );
 const Classes = React.lazy(() =>
   import("../../AdminComponents/academics/classes/Classes")
+);
+const ClassesPast = React.lazy(() =>
+  import("../../AdminComponents/academics/classes/PastClasses")
 );
 const AddClass = React.lazy(() =>
   import("../../AdminComponents/academics/classes/AddClass")
@@ -122,7 +126,7 @@ const AllStudents = React.lazy(() =>
   import("../../AdminComponents/students/allStudents/AllStudents")
 );
 const Upgrade = React.lazy(() =>
-  import("../../AdminComponents/students/Upgrade")
+  import("../../AdminComponents/students/upGrade/Upgrade")
 );
 
 const Campuses = React.lazy(() =>
@@ -660,6 +664,11 @@ const routes = [
     component: AddClass,
   },
   {
+    path: "/academics/classes/past",
+    name: "Past Classes",
+    component: ClassesPast,
+  },
+  {
     path: "/academics/classes/edit/:id",
     name: "Classes",
     component: EditClass,
@@ -1019,6 +1028,18 @@ const routes = [
     exact: true,
     name: "Messages",
     component: Messages,
+  },
+  {
+    path: "/messages/chat",
+    exact: true,
+    name: "Messages",
+    component: Chat,
+  },
+  {
+    path: "/messages/chat/:id",
+    exact: true,
+    name: "Messages",
+    component: Chat,
   },
   {
     path: "/message/:id",

@@ -70,6 +70,8 @@ export default function EnhancedTable({
   route,
   handleWithdraw,
   handleDelete,
+  noData,
+  noActions,
 }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
@@ -145,6 +147,7 @@ export default function EnhancedTable({
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
+              noActions={noActions}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={students?.length}
@@ -159,7 +162,6 @@ export default function EnhancedTable({
                     return (
                       <TableRow
                         hover
-                        // onClick={() => history.push(`/${route}/${row.userID}`)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
@@ -193,21 +195,24 @@ export default function EnhancedTable({
                         <TableCell align="left">
                           {row?.status || row?.position}
                         </TableCell>
-                        <TableCell align="left">
-                          {row?.classID || "-"}
-                        </TableCell>
-
+                        {row?.role === "student" && (
+                          <TableCell align="left">
+                            {row?.classID || "-"}
+                          </TableCell>
+                        )}
                         <TableCell align="left">{row?.gender || "-"}</TableCell>
-                        <TableCell align="left">
-                          <ViewActions
-                            id={row?.userID}
-                            route={route}
-                            isWithdraw={row?.withdraw}
-                            history={history}
-                            handleWithdraw={handleWithdraw}
-                            handleDelete={handleDelete}
-                          />
-                        </TableCell>
+                        {!noActions && (
+                          <TableCell align="left">
+                            <ViewActions
+                              id={row?.userID}
+                              route={route}
+                              isWithdraw={row?.withdraw}
+                              history={history}
+                              handleWithdraw={handleWithdraw}
+                              handleDelete={handleDelete}
+                            />
+                          </TableCell>
+                        )}
                       </TableRow>
                     );
                   })}
@@ -220,8 +225,18 @@ export default function EnhancedTable({
             ) : (
               <TableBody>
                 <TableRow>
-                  <TableCell colSpan="5">NO DATA</TableCell>
+                  <TableCell
+                    className="text-danger text-center"
+                    colSpan={headCells.length + 2}
+                  >
+                    {noData || "NO DATA"}
+                  </TableCell>
                 </TableRow>
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
               </TableBody>
             )}
           </Table>

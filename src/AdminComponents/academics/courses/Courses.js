@@ -62,7 +62,6 @@ function Courses() {
           errorAlert(res.data.error);
           return 0;
         }
-        //   successAlert("Deleted");
         setcourses(courses.filter((course) => course._id !== id));
       });
     }
@@ -104,16 +103,15 @@ function Courses() {
 
   return (
     <div>
-      <div className="row">
-        <div className="col-xs-12 col-sm-8 col-md-10">
-          <Search
-            title="Courses List"
-            handleSearch={handleSearch}
-            handleReset={handleReset}
-            inputFields={inputFields}
-          />
-        </div>
-        <div className="col-xs-12 col-sm-4 col-md-2">
+      <Search
+        title="Courses List"
+        handleSearch={handleSearch}
+        handleReset={handleReset}
+        inputFields={inputFields}
+      />
+      <div className="content__container">
+        <div className="d-flex justify-content-between mb-2">
+          <h3>Courses List</h3>
           <Link
             to={`/academics/courses/add`}
             className="btn orange__btn btn__lg"
@@ -121,16 +119,15 @@ function Courses() {
             Add New Course
           </Link>
         </div>
+        <CourseTable
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+          data={courses}
+          loading={loading}
+          handleSearch={handleSearch}
+          tableHeader={tableHeadings}
+        />
       </div>
-
-      <CourseTable
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-        data={courses}
-        loading={loading}
-        handleSearch={handleSearch}
-        tableHeader={tableHeadings}
-      />
     </div>
   );
 }

@@ -4,12 +4,12 @@ import Table from "../../shared/ListTable";
 import axios from "../../../store/axios";
 import { useSelector } from "react-redux";
 import { selectStaff } from "../../../store/slices/schoolSlice";
-import { errorAlert, successAlert } from "../../../utils";
+import { errorAlert, successAlert, currentCurrency } from "../../../utils";
 import Edit from "./Edit";
 
 const tableHeader = [
   { id: "name", name: "Name" },
-  { id: "amount", name: "Amount" },
+  { id: "amount", name: `Amount (${currentCurrency()})` },
   { id: "number", name: "Number of Staff" },
 ];
 
@@ -43,11 +43,20 @@ function Deductions() {
   }, []);
 
   const handleSetStaff = (e) => {
-    staff.includes(e.target.value);
+    console.log("clicked", e);
     if (staff.includes(e.target.value)) {
       setstaff(staff.filter((i) => i !== e.target.value));
     } else {
       setstaff([...staff, e.target.value]);
+    }
+  };
+
+  const handleEditSetStaff = (e) => {
+    console.log("clicked", e);
+    if (staff.includes(e.target.value)) {
+      seteditstaff(editstaff.filter((i) => i !== e.target.value));
+    } else {
+      seteditstaff([...editstaff, e.target.value]);
     }
   };
 
@@ -84,7 +93,7 @@ function Deductions() {
         staff: editstaff,
         amount: editamount,
       })
-      .then((res) => {
+      .then(async (res) => {
         seteditLoading(false);
         if (res.data.error) {
           return errorAlert(res.data.error);
@@ -94,12 +103,15 @@ function Deductions() {
           ...res.data.doc,
           number: res.data.doc.staff?.length,
         };
-        console.log(newDoc);
         setdata(data.map((doc) => (doc._id === editID ? newDoc : doc)));
         seteditname("");
         seteditamount("");
         seteditstaff([]);
         setopenEdit(false);
+        await axios.post("/activitylog/create", {
+          activity: `salary deductions was edited`,
+          user: "admin",
+        });
       });
   };
 
@@ -111,7 +123,7 @@ function Deductions() {
         staff,
         amount,
       })
-      .then((res) => {
+      .then(async (res) => {
         setloading(false);
         if (res.data.error) {
           return errorAlert(res.data.error);
@@ -121,6 +133,10 @@ function Deductions() {
         setname("");
         setamount("");
         setstaff([]);
+        await axios.post("/activitylog/create", {
+          activity: `salary deductions is added`,
+          user: "admin",
+        });
       });
   };
 
@@ -160,6 +176,7 @@ function Deductions() {
         handleSelectAll={handleSelectAll}
         Allstaff={Allstaff}
         loading={editLoading}
+        handleSetStaff={handleEditSetStaff}
         staff={editstaff}
         setamount={seteditamount}
         name={editname}

@@ -5,7 +5,7 @@ import axios from "../../../store/axios";
 import Table from "./Table";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../store/slices/userSlice";
-import moment from "moment";
+//import moment from "moment";
 
 //Employee's SSF
 const tableHeader = [
@@ -29,6 +29,9 @@ function Deductions() {
   const [isGenerate, setisGenerate] = useState(false);
   const user = useSelector(selectUser);
 
+  const [selectedMonth, setselectedMonth] = useState(0);
+  const [selectedYear, setselectedYear] = useState("");
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (year === "" || month === "") {
@@ -41,13 +44,8 @@ function Deductions() {
     };
     axios.get(`/transactions/staff/pay`).then((res) => {
       setisGenerate(true);
-      //   let monthData = res.data.docs.filter((y) => {
-      //     console.log(moment(y.date).year());
-      //     return (
-      //       y.pay?.month === month
-      //       //moment(e.date).year() === req.params.year
-      //     );
-      //   });
+      setselectedMonth(month);
+      setselectedYear(year);
       let arrData = [];
       res.data.map(async (doc) => {
         let u = await getUser(doc?.userID);
@@ -67,6 +65,14 @@ function Deductions() {
     setloading(false);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
+  // const handlePrint = () => {
+  //   window.print();
+  // };
+  console.log(data);
   return (
     <div>
       <h3>Paye Deductions</h3>
@@ -134,65 +140,68 @@ function Deductions() {
       </form>
 
       {isGenerate && (
-        <div className="content__container">
-          <div>
-            <h6>
-              <strong>
-                EMPLOYER'S MONTHLY TAX DEDUCTIONS SCHEDULE (P.A.Y.E)
-              </strong>
-            </h6>
-            <div className="row">
-              <div className="col-2">Name</div>
-              <div className="col-2">{user?.name}</div>
-            </div>
-            <div className="row">
-              <div className="col-2">Month</div>
-              <div className="col-2">
-                {monthYear[month].name} {year}
-              </div>
-            </div>
-          </div>
-
-          <Table data={data} tableHeader={tableHeader}></Table>
-          <div className="mt-3">
-            <p>
-              I hereby declare that the information provided above is complete
-              and accurate.
-            </p>
-
+        <>
+          <div className="content__container" id="section-to-print">
             <div>
-              <div className="row mb-2">
-                <div className="col-4">Name of Declarant</div>
-                <div className="col-4">
-                  ..........................................
+              <h6>
+                <strong>
+                  EMPLOYER'S MONTHLY TAX DEDUCTIONS SCHEDULE (P.A.Y.E)
+                </strong>
+              </h6>
+              <div className="row">
+                <div className="col-2">Name</div>
+                <div className="col-2">{user?.name}</div>
+              </div>
+              <div className="row">
+                <div className="col-2">Month</div>
+                <div className="col-2">
+                  {monthYear[selectedMonth].name} {selectedYear}
                 </div>
               </div>
-              <div className="row mb-2">
-                <div className="col-4">Designation</div>
-                <div className="col-4">
-                  ..........................................
+            </div>
+
+            <Table data={data} tableHeader={tableHeader}></Table>
+            <div className="mt-3">
+              <p>
+                I hereby declare that the information provided above is complete
+                and accurate.
+              </p>
+
+              <div>
+                <div className="row mb-2">
+                  <div className="col-4">Name of Declarant</div>
+                  <div className="col-4">
+                    ..........................................
+                  </div>
                 </div>
-              </div>
-              <div className="row mb-2">
-                <div className="col-4">Signature</div>
-                <div className="col-4">
-                  ..........................................
+                <div className="row mb-2">
+                  <div className="col-4">Designation</div>
+                  <div className="col-4">
+                    ..........................................
+                  </div>
                 </div>
-              </div>
-              <div className="row mb-2">
-                <div className="col-4">Date</div>
-                <div className="col-4">
-                  ..........................................
+                <div className="row mb-2">
+                  <div className="col-4">Signature</div>
+                  <div className="col-4">
+                    ..........................................
+                  </div>
+                </div>
+                <div className="row mb-2">
+                  <div className="col-4">Date</div>
+                  <div className="col-4">
+                    ..........................................
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+          <div className="d-flex justify-content-center my-3">
+            <button onClick={() => handlePrint()} className="btn blue__btn">
+              Print
+            </button>
+          </div>
+        </>
       )}
-
-      <div className="d-flex justify-content-end mt-3">
-        <button className="btn blue__btn">Print</button>
-      </div>
     </div>
   );
 }
