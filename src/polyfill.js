@@ -1,19 +1,22 @@
-
 (function () {
+  if (typeof window.CustomEvent === 'function') return false;
 
-  if ( typeof window.CustomEvent === "function" ) return false
-
-  function CustomEvent ( event, params ) {
-    params = params || { bubbles: false, cancelable: false, detail: undefined }
-    var evt = document.createEvent( 'CustomEvent' )
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail )
-    return evt
+  function CustomEvent(event, params) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent(
+      event,
+      params.bubbles,
+      params.cancelable,
+      params.detail
+    );
+    return evt;
   }
 
-  CustomEvent.prototype = window.Event.prototype
+  CustomEvent.prototype = window.Event.prototype;
 
-  window.CustomEvent = CustomEvent
-})()
+  window.CustomEvent = CustomEvent;
+})();
 
 if (!Element.prototype.matches) {
   Element.prototype.matches =
@@ -22,7 +25,7 @@ if (!Element.prototype.matches) {
 }
 
 if (!Element.prototype.closest) {
-  Element.prototype.closest = function(s) {
+  Element.prototype.closest = function (s) {
     var el = this;
 
     do {

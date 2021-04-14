@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import axios from "../../../store/axios";
-import { useParams } from "react-router-dom";
-import moment from "moment";
-import { monthYear } from "../../../data";
-import { currentCurrency } from "../../../utils";
+import React, { useState, useEffect } from 'react';
+import axios from '../../../store/axios';
+import { useParams } from 'react-router-dom';
+import moment from 'moment';
+import { monthYear } from '../../../data';
+import { currentCurrency } from '../../../utils';
 
 const today = new Date();
 
@@ -11,21 +11,21 @@ function PaySlip() {
   const [state, setstate] = useState({});
   const [payrow, setpayrow] = useState({});
   const [user, setuser] = useState({});
-  const [salaryDeducation, setsalaryDeducation] = useState("");
+  const [salaryDeducation, setsalaryDeducation] = useState('');
   const [istax, setistax] = useState(false);
   const { id } = useParams();
-
+  console.log('Salary deductions', salaryDeducation);
   useEffect(() => {
-    axios.get("/school").then((res) => {
+    axios.get('/school').then(res => {
       setstate(res.data);
     });
   }, []);
 
   useEffect(() => {
-    axios.get("/deductions").then((res) => {
+    axios.get('/deductions').then(res => {
       let total = [];
-      res.data.map((e) => {
-        let isExist = e.staff.find((i) => i === id);
+      res.data.map(e => {
+        let isExist = e.staff.find(i => i === id);
         if (isExist) {
           return total.push({
             amount: e.amount,
@@ -33,13 +33,17 @@ function PaySlip() {
           });
         }
       });
-      let bal = total.reduce((val, e) => val + e.amount, 0);
+      let bal = total.reduce((val, e) => {
+        console.log('bal', e);
+        return val + Number(e?.amount);
+      }, 0);
+
       setsalaryDeducation(bal);
     });
   }, [id]);
 
   useEffect(() => {
-    axios.get(`/teachers/${id}`).then(async (res) => {
+    axios.get(`/teachers/${id}`).then(async res => {
       setuser(res.data.teacher);
       setistax(res.data.teacher?.ssnit ? true : false);
       let payData = await axios.get(`/payrow/${res.data.teacher?.position}`);
@@ -61,34 +65,34 @@ function PaySlip() {
 
   return (
     <>
-      <div className="border content__container mb-4" id="section-to-print">
-        <div className="text-center border-bottom p-3">
+      <div className='border content__container mb-4' id='section-to-print'>
+        <div className='text-center border-bottom p-3'>
           {/* <img height="100px" src={getImgSrc(state?.profileUrl)} alt="" /> */}
           <h2>{state?.fullName}</h2>
           <p>{state?.motto}</p>
           <h6>
             <strong>
-              PaySlip for {monthYear[today.getMonth()].name}{" "}
+              PaySlip for {monthYear[today.getMonth()].name}{' '}
               {today.getFullYear()}
             </strong>
           </h6>
         </div>
-        <div className="row p-3">
-          <div className="col-6">
-            <div className="d-flex">
-              <h6 className="col-4">
-                {" "}
+        <div className='row p-3'>
+          <div className='col-6'>
+            <div className='d-flex'>
+              <h6 className='col-4'>
+                {' '}
                 <strong>Name</strong>
               </h6>
               <h6>
                 <strong>
-                  {user?.name} {user?.middleName} {user?.surname}{" "}
+                  {user?.name} {user?.middleName} {user?.surname}{' '}
                 </strong>
               </h6>
             </div>
-            <div className="d-flex ">
-              <h6 className="col-4">
-                {" "}
+            <div className='d-flex '>
+              <h6 className='col-4'>
+                {' '}
                 <strong>Position</strong>
               </h6>
               <h6>
@@ -96,34 +100,34 @@ function PaySlip() {
               </h6>
             </div>
           </div>
-          <div className="col-6">
-            <div className="d-flex ">
-              <h6 className="col-4">
-                {" "}
+          <div className='col-6'>
+            <div className='d-flex '>
+              <h6 className='col-4'>
+                {' '}
                 <strong>Account Number</strong>
               </h6>
               <h6>
-                <strong>{user?.accountNumber || "-"} </strong>
+                <strong>{user?.accountNumber || '-'} </strong>
               </h6>
             </div>
-            <div className="d-flex ">
-              <h6 className="col-4">
-                {" "}
+            <div className='d-flex '>
+              <h6 className='col-4'>
+                {' '}
                 <strong>Bank</strong>
               </h6>
               <h6>
-                <strong>{user?.bank || "-"} </strong>
+                <strong>{user?.bank || '-'} </strong>
               </h6>
             </div>
           </div>
         </div>
-        <table className="table table-bordered">
+        <table className='table table-bordered'>
           <thead>
             <tr>
-              <th colSpan="2" scope="col">
+              <th colSpan='2' scope='col'>
                 Income ({currentCurrency()})
               </th>
-              <th colSpan="2" scope="col">
+              <th colSpan='2' scope='col'>
                 Deductions ({currentCurrency()})
               </th>
             </tr>
@@ -140,7 +144,7 @@ function PaySlip() {
               <td>{payrow?.allowance}</td>
               <td>Employee SSNIT</td>
 
-              <td>{istax ? payrow?.total * 0.05 : "-"}</td>
+              <td>{istax ? payrow?.total * 0.05 : '-'}</td>
             </tr>
             <tr>
               <td>Bonus</td>
@@ -167,11 +171,11 @@ function PaySlip() {
         <div>
           <div>
             <h6>
-              Date :{" "}
-              <strong>{moment(today).format("dddd Do MMMM YYYY")}</strong>
+              Date :{' '}
+              <strong>{moment(today).format('dddd Do MMMM YYYY')}</strong>
             </h6>
           </div>
-          <div className="d-flex justify-content-between">
+          <div className='d-flex justify-content-between'>
             <div>
               <h6>Signature of Employer: ..........................</h6>
             </div>
@@ -182,8 +186,8 @@ function PaySlip() {
         </div>
       </div>
 
-      <div className="d-flex justify-content-center mb-3">
-        <button onClick={handlePrint} className="btn blue__btn">
+      <div className='d-flex justify-content-center mb-3'>
+        <button onClick={handlePrint} className='btn blue__btn'>
           Print
         </button>
       </div>
