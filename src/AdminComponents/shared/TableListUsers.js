@@ -1,18 +1,18 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
-import Avatar from "@material-ui/core/Avatar";
-import { useHistory } from "react-router-dom";
-import TableHeader from "./TableHeader";
-import { getImgSrc, getIntial } from "../../utils";
-import ViewActions from "./ViewOptions";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Checkbox from '@material-ui/core/Checkbox';
+import Avatar from '@material-ui/core/Avatar';
+import { useHistory } from 'react-router-dom';
+import TableHeader from './TableHeader';
+import { getImgSrc, getIntial } from '../../utils';
+import ViewActions from './ViewOptions';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -25,7 +25,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === "desc"
+  return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -37,15 +37,15 @@ function stableSort(array, comparator) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis.map(el => el[0]);
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
-    width: "100%",
+    width: '100%',
   },
   paper: {
-    width: "100%",
+    width: '100%',
     marginBottom: theme.spacing(2),
   },
   table: {
@@ -53,12 +53,12 @@ const useStyles = makeStyles((theme) => ({
   },
   visuallyHidden: {
     border: 0,
-    clip: "rect(0 0 0 0)",
+    clip: 'rect(0 0 0 0)',
     height: 1,
     margin: -1,
-    overflow: "hidden",
+    overflow: 'hidden',
     padding: 0,
-    position: "absolute",
+    position: 'absolute',
     top: 20,
     width: 1,
   },
@@ -74,22 +74,22 @@ export default function EnhancedTable({
   noActions,
 }) {
   const classes = useStyles();
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("name");
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('name');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const history = useHistory();
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
+  const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = students.map((n) => n.name);
+      const newSelecteds = students.map(n => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -120,12 +120,12 @@ export default function EnhancedTable({
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const isSelected = (userID) => selected.indexOf(userID) !== -1;
+  const isSelected = userID => selected.indexOf(userID) !== -1;
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, students?.length - page * rowsPerPage);
@@ -137,10 +137,9 @@ export default function EnhancedTable({
         <TableContainer>
           <Table
             className={classes.table}
-            aria-labelledby="tableTitle"
-            size="medium"
-            aria-label="enhanced table"
-          >
+            aria-labelledby='tableTitle'
+            size='medium'
+            aria-label='enhanced table'>
             <TableHeader
               classes={classes}
               headCells={headCells}
@@ -157,52 +156,51 @@ export default function EnhancedTable({
                 {stableSort(students, getComparator(order, orderBy))
                   ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   ?.map((row, index) => {
+                    console.log('Profile', row?.profileUrl);
                     const isItemSelected = isSelected(row?.userID);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                       <TableRow
                         hover
-                        role="checkbox"
+                        role='checkbox'
                         aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.userID}
-                        selected={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
+                        selected={isItemSelected}>
+                        <TableCell padding='checkbox'>
                           <Checkbox
-                            onClick={(event) => handleClick(event, row?.userID)}
+                            onClick={event => handleClick(event, row?.userID)}
                             checked={isItemSelected}
-                            inputProps={{ "aria-labelledby": labelId }}
+                            inputProps={{ 'aria-labelledby': labelId }}
                           />
                         </TableCell>
-                        <TableCell align="left" id={labelId}>
-                          {row?.userID || "-"}
+                        <TableCell align='left' id={labelId}>
+                          {row?.userID || '-'}
                         </TableCell>
-                        <TableCell align="left">
+                        <TableCell align='left'>
                           <Avatar
                             src={`${getImgSrc(row?.profileUrl)}`}
-                            alt={getIntial(row?.name)}
-                          ></Avatar>
+                            alt={getIntial(row?.name)}></Avatar>
                         </TableCell>
-                        <TableCell align="left">{row?.name}</TableCell>
-                        <TableCell align="left">
-                          {" "}
-                          {row?.middleName || "-"}
+                        <TableCell align='left'>{row?.name}</TableCell>
+                        <TableCell align='left'>
+                          {' '}
+                          {row?.middleName || '-'}
                         </TableCell>
-                        <TableCell align="left">
-                          {row?.surname || "-"}
+                        <TableCell align='left'>
+                          {row?.surname || '-'}
                         </TableCell>
-                        <TableCell align="left">
+                        <TableCell align='left'>
                           {row?.status || row?.position}
                         </TableCell>
-                        {row?.role === "student" && (
-                          <TableCell align="left">
-                            {row?.classID || "-"}
+                        {row?.role === 'student' && (
+                          <TableCell align='left'>
+                            {row?.classID || '-'}
                           </TableCell>
                         )}
-                        <TableCell align="left">{row?.gender || "-"}</TableCell>
+                        <TableCell align='left'>{row?.gender || '-'}</TableCell>
                         {!noActions && (
-                          <TableCell align="left">
+                          <TableCell align='left'>
                             <ViewActions
                               id={row?.userID}
                               route={route}
@@ -226,10 +224,9 @@ export default function EnhancedTable({
               <TableBody>
                 <TableRow>
                   <TableCell
-                    className="text-danger text-center"
-                    colSpan={headCells.length + 2}
-                  >
-                    {noData || "NO DATA"}
+                    className='text-danger text-center'
+                    colSpan={headCells.length + 2}>
+                    {noData || 'NO DATA'}
                   </TableCell>
                 </TableRow>
                 {emptyRows > 0 && (
@@ -244,7 +241,7 @@ export default function EnhancedTable({
         {students?.length > 5 && (
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
-            component="div"
+            component='div'
             count={students.length}
             rowsPerPage={rowsPerPage}
             page={page}
