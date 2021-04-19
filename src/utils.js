@@ -97,9 +97,8 @@ export const getIntial = name => {
 //   return `http://localhost:5000/${src}`;
 // };
 
-//Uploading images
 export const getImgSrc = src => {
-  return `https://inovotek-sms.netlify.app/${src}`;
+  return `https://inovotek-sms.herokuapp.com/${src}`;
 };
 
 export const timeStamp = time => {

@@ -1,13 +1,14 @@
-import React from 'react';
-import { CFooter } from '@coreui/react';
+import React from "react";
+import { CFooter } from "@coreui/react";
 
 const TheFooter = () => {
   let year = new Date();
 
   return (
     <CFooter fixed={false}>
-      <p className='text-center  w-100 mt-3'>
-        © 2014 - {year.getFullYear()} i-Novotek Limited. All Rights Reserved.
+      <p className="text-center  w-100 mt-3">
+        © 2015 - {year.getFullYear()} Darrel Technologies Limited. All Rights
+        Reserved.
       </p>
     </CFooter>
   );
