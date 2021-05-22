@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
-
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -74,10 +73,9 @@ export default function FullScreenDialog({
       </AppBar>
       <form action="" className="m-5">
         <h3 className="mb-5">Set Grades for Class {classID} </h3>
-
         <div className="mb-3">
           <label className="form-label">
-            Set ClassWork ({Number(classworkMark || 0)}%)
+            Set ClassWork ( out of {Number(classworkMark || 0)})
           </label>
           <input
             value={classWork}
@@ -89,14 +87,13 @@ export default function FullScreenDialog({
           />
           {errors.a1 && (
             <span className=" form-error text-danger mb-2">
-              contributes ({Number(classworkMark || 0)}%
+              out of ({Number(classworkMark || 0)}
             </span>
           )}
         </div>
-
         <div className="mb-5">
           <label className="form-label">
-            Exam Mark ({Number(examMark || 0)})%
+            Exam Mark (out of {Number(examMark || 0)})
           </label>
           <input
             value={exam}
@@ -108,11 +105,11 @@ export default function FullScreenDialog({
           />
           {errors.exams && (
             <span className=" form-error text-danger mb-2">
-              contributes ({Number(examMark || 0)})%
+              out of ({Number(examMark || 0)}
             </span>
           )}
         </div>
-        <div className="mb-5">
+        {/* <div className="mb-5">
           <label className="form-label">Position</label>
           <input
             value={position}
@@ -127,7 +124,7 @@ export default function FullScreenDialog({
               cannot be negative
             </span>
           )}
-        </div>
+        </div> */}
         <div className="mb-3">
           <button
             disabled={loading}

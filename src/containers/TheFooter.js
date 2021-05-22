@@ -7,8 +7,7 @@ const TheFooter = () => {
   return (
     <CFooter fixed={false}>
       <p className='text-center  w-100 mt-3'>
-        © 2014 - {year.getFullYear()} iNovotek Company Limited. All Rights
-        Reserved.
+        © 2017 - {year.getFullYear()} iNovotek Company Ltd. All Rights Reserved.
       </p>
     </CFooter>
   );

@@ -1,0 +1,1 @@
+{"version":3,"sources":["AdminComponents/Profile/academicsReports/EndofYearReport.js"],"names":["EndofYearReport"],"mappings":"iIAAA,wBAMeA,UAJf,WACE,OAAO","file":"static/js/176.b82f85eb.chunk.js","sourcesContent":["import React from \"react\";\n\nfunction EndofYearReport() {\n  return <div>end of year</div>;\n}\n\nexport default EndofYearReport;\n"],"sourceRoot":""}

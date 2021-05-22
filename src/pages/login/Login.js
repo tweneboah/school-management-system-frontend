@@ -13,12 +13,9 @@ import {
   CRow,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import logo from '../../assets/icons/logo.png';
+import logo from '../../assets/icons/schoolLogo.svg';
 import axios from './../../store/axios';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { loggin } from '../../store/slices/userSlice';
-import { LoginString } from '../../store/localStorage';
 import { errorAlert } from '../../utils';
 import { Link } from 'react-router-dom';
 import { handleLogin } from '../../store/apiCall';
@@ -28,7 +25,6 @@ const Login = ({ history }) => {
   const [password, setpassword] = useState('');
   const [loading, setloading] = useState(false);
   const { register, handleSubmit, errors } = useForm();
-  const dispatch = useDispatch();
 
   const handleSignin = () => {
     setloading(true);
@@ -55,8 +51,8 @@ const Login = ({ history }) => {
 
   return (
     <div
-      style={{ backgroundColor: '#003049' }}
-      className='c-app c-default-layout  flex-row align-items-center'>
+      style={{ backgroundColor: '#023047' }}
+      className='c-app c-default-layout flex-row align-items-center'>
       <CContainer>
         <CRow className='justify-content-center'>
           <CCol md='8'>
@@ -152,14 +148,15 @@ const Login = ({ history }) => {
                 style={{ width: '44%', backgroundColor: '#023047' }}>
                 <CCardBody className='text-center'>
                   <div>
-                    <img src={logo} alt='logo' />
-                    <h2>Welcome Top Hills High</h2>
+                    <h2>Welcome to iNovotek School Management System</h2>
+                    <img
+                      style={{ height: '200px', marginBottom: '10px' }}
+                      src={logo}
+                      alt='logo'
+                    />
                     <p>
-                      Manage Students, Staff, Academics, Finance, canteens,
-                      inventory, reporting with ease.
-                      <p style={{ color: 'yellow' }}>
-                        Contact +233547425722 for 24/7 support
-                      </p>
+                      This application has all the important features that will
+                      move your school to the next level
                     </p>
                   </div>
                 </CCardBody>
