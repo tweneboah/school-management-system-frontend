@@ -1,10 +1,10 @@
 //import {API_BASE_URL} from './api'
-import moment from "moment";
-import { toast } from "react-toastify";
+import moment from 'moment';
+import { toast } from 'react-toastify';
 
-export const successAlert = (text) => {
+export const successAlert = text => {
   return toast.success(text, {
-    position: "top-right",
+    position: 'top-right',
     autoClose: false,
     hideProgressBar: false,
     closeOnClick: true,
@@ -14,9 +14,9 @@ export const successAlert = (text) => {
   });
 };
 
-export const errorAlert = (text) => {
+export const errorAlert = text => {
   return toast.error(text, {
-    position: "top-right",
+    position: 'top-right',
     autoClose: false,
     hideProgressBar: false,
     closeOnClick: true,
@@ -26,7 +26,7 @@ export const errorAlert = (text) => {
   });
 };
 
-export const getYearsList = (length) => {
+export const getYearsList = length => {
   const min = new Date().getFullYear();
   const max = min + length;
 
@@ -42,10 +42,10 @@ export const getYearsList = (length) => {
 };
 
 export const currentCurrency = () => {
-  return "GH¢";
+  return 'GH¢';
 };
 
-export const getYearsPast = (length) => {
+export const getYearsPast = length => {
   const max = new Date().getFullYear();
   const min = max - length;
 
@@ -70,64 +70,67 @@ export const getID = function () {
 export const getTrimString = (str, length) => {
   if (str.length > length) {
     console.log(str, length);
-    return str.substr(0, length) + "...";
+    return str.substr(0, length) + '...';
   }
   return str;
 };
 
-export const getCapitalize = (string) => {
+export const getCapitalize = string => {
   if (string) {
     return string.charAt(0).toUpperCase() + string.substring(1);
   } else return null;
 };
 
-export const getLowerCase = (string) => {
+export const getLowerCase = string => {
   if (string) {
     return string.toLowerCase();
   } else return null;
 };
 
-export const getIntial = (name) => {
+export const getIntial = name => {
   if (name) {
     return name.slice(0, 1).toUpperCase();
   }
   return null;
 };
 
-export const getImgSrc = (src) => {
-  return `http://localhost:5000/${src}`;
+export const getImgSrc = src => {
+  return `https://inovotek-sms.herokuapp.com/${src}`;
 };
+// export const getImgSrc = src => {
+//   return `http://localhost:5000/${src}`;
+// };
 
-export const timeStamp = (time) => {
-  if (moment().format("dddd") === moment(time).format("dddd")) {
-    return `Today ${moment(time)?.format("h:mm a")}`;
+export const timeStamp = time => {
+  if (moment().format('dddd') === moment(time).format('dddd')) {
+    return `Today ${moment(time)?.format('h:mm a')}`;
   } else if (
-    moment().subtract(1, "days").format("dddd") === moment(time)?.format("dddd")
+    moment().subtract(1, 'days').format('dddd') === moment(time)?.format('dddd')
   ) {
-    return `Yesterday ${moment(time)?.format("h:mm a")}`;
+    return `Yesterday ${moment(time)?.format('h:mm a')}`;
   } else {
-    return moment(time)?.format("dddd,  h:mm a");
+    return moment(time)?.format('dddd,  h:mm a');
   }
 };
 
 export const combineDateAndTime = function (date, time) {
-  console.log(time, "tieme");
+  console.log(time, 'tieme');
   // let d = new Date();
   // time =   d.setTime(time);
 
   date = new Date(date);
-  console.log(date, "date");
+  console.log(date, 'date');
 
   var year = date.getFullYear();
   var month = date.getMonth() + 1; // Jan is 0, dec is 11
   var day = date.getDate();
-  var dateString = "" + year + "-" + month + "-" + day;
-  var combined = new Date(dateString + " " + time);
+  var dateString = '' + year + '-' + month + '-' + day;
+  var combined = new Date(dateString + ' ' + time);
 
   return combined;
 };
 
-export const separateDateandTime = (date) => {
+export const separateDateandTime = date => {
   const d = new Date(date);
 
   var year = d.getFullYear();
@@ -135,13 +138,13 @@ export const separateDateandTime = (date) => {
   var da = d.getDate();
   var hours = d.getHours();
   var minutes = d.getMinutes();
-  var day = "" + year + "-" + month + "-" + da;
-  var time = "" + hours + ": " + minutes;
+  var day = '' + year + '-' + month + '-' + da;
+  var time = '' + hours + ': ' + minutes;
 
   return { day, time };
 };
 
-export const sortArray = (arr) => {
+export const sortArray = arr => {
   arr.sort(function (x, y) {
     return x.updatedAt - y.updatedAt;
   });
